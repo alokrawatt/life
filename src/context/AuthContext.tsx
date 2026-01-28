@@ -80,28 +80,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     useEffect(() => {
+        let isMounted = true;
+
         // Get initial session
         const initializeAuth = async () => {
             try {
                 const { data: { session: initialSession } } = await supabase.auth.getSession();
+
+                if (!isMounted) return;
 
                 setSession(initialSession);
                 setUser(initialSession?.user ?? null);
 
                 if (initialSession?.user) {
                     const userProfile = await fetchProfile(initialSession.user.id);
-                    setProfile(userProfile);
+                    if (isMounted) {
+                        setProfile(userProfile);
+                    }
                 }
             } catch (error) {
+                // Ignore abort errors - they're expected during navigation
+                if (error instanceof Error && error.name === 'AbortError') return;
                 console.error('Auth initialization error:', error);
             } finally {
-                setIsLoading(false);
+                if (isMounted) {
+                    setIsLoading(false);
+                }
             }
         };
 
         // Set a timeout to prevent infinite loading
         const timeout = setTimeout(() => {
-            setIsLoading(false);
+            if (isMounted) {
+                setIsLoading(false);
+            }
         }, 5000);
 
         initializeAuth().finally(() => clearTimeout(timeout));
@@ -109,12 +121,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Listen for auth changes
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
             async (event, currentSession) => {
+                if (!isMounted) return;
+
                 setSession(currentSession);
                 setUser(currentSession?.user ?? null);
 
                 if (currentSession?.user) {
                     const userProfile = await fetchProfile(currentSession.user.id);
-                    setProfile(userProfile);
+                    if (isMounted) {
+                        setProfile(userProfile);
+                    }
                 } else {
                     setProfile(null);
                 }
@@ -123,7 +139,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             }
         );
 
-        return () => subscription.unsubscribe();
+        return () => {
+            isMounted = false;
+            subscription.unsubscribe();
+        };
     }, []);
 
     const signInWithEmail = async (email: string, password: string) => {

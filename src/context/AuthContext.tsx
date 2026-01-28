@@ -26,6 +26,7 @@ interface AuthContextType {
     signUpWithEmail: (email: string, password: string, inviteCode: string) => Promise<{ error: Error | null }>;
     signInWithMagicLink: (email: string, inviteCode?: string) => Promise<{ error: Error | null }>;
     signInWithGoogle: (inviteCode: string) => Promise<{ error: Error | null }>;
+    signInExistingWithGoogle: () => Promise<{ error: Error | null }>;
     signInAnonymously: () => Promise<{ error: Error | null }>;
     validateInviteCode: (code: string) => Promise<{ valid: boolean; error?: string }>;
     signOut: () => Promise<void>;
@@ -218,6 +219,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { error: error as Error | null };
     };
 
+    const signInExistingWithGoogle = async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: `${window.location.origin}/auth/callback`,
+            },
+        });
+        return { error: error as Error | null };
+    };
+
     const signInAnonymously = async () => {
         const { error } = await supabase.auth.signInAnonymously();
         return { error: error as Error | null };
@@ -351,6 +362,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 signUpWithEmail,
                 signInWithMagicLink,
                 signInWithGoogle,
+                signInExistingWithGoogle,
                 signInAnonymously,
                 validateInviteCode,
                 signOut,

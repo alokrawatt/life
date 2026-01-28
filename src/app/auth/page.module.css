@@ -326,3 +326,48 @@
 .backButton:hover {
     color: var(--color-text-primary);
 }
+
+/* Switch Mode Button */
+.switchMode {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    text-align: center;
+    width: 100%;
+    transition: color var(--transition-fast);
+}
+
+.switchMode:hover {
+    color: var(--color-text-primary);
+}
+
+.switchMode strong {
+    color: var(--color-accent);
+    font-weight: 500;
+}
+
+.switchMode:hover strong {
+    text-decoration: underline;
+}
+
+/* Sign In Header */
+.signInHeader {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.signInHeader h2 {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.signInHeader p {
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+}

@@ -1,0 +1,284 @@
+.loading {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.container {
+    max-width: 700px;
+    margin: 0 auto;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.header {
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    margin-bottom: 0.25rem;
+}
+
+.header p {
+    color: var(--color-text-muted);
+}
+
+.section {
+    margin-bottom: 2rem;
+}
+
+.section h2 {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+.card {
+    padding: 0 !important;
+}
+
+.setting {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+    gap: 1rem;
+}
+
+.setting:last-child {
+    border-bottom: none;
+}
+
+.settingInfo h3 {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.settingInfo p {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+}
+
+.themeToggle {
+    display: flex;
+    gap: 0.25rem;
+    background-color: var(--color-bg-secondary);
+    padding: 0.25rem;
+    border-radius: var(--radius-md);
+}
+
+.themeBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    background: none;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.themeBtn svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+.themeBtn:hover {
+    color: var(--color-text-primary);
+}
+
+.themeBtn.active {
+    background-color: var(--color-bg-elevated);
+    color: var(--color-text-primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.privacyNote {
+    display: flex;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    background-color: var(--color-bg-secondary);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.privacyNote svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+    color: var(--color-accent);
+}
+
+.privacyNote strong {
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.privacyNote p {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+}
+
+.dangerCard {
+    border-color: var(--color-error);
+}
+
+.footer {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.footer p {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.25rem;
+}
+
+.deleteModal {
+    padding: 0.5rem 0;
+}
+
+.deleteWarning {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.deleteWarning svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+    color: var(--color-error);
+}
+
+.deleteWarning p {
+    font-weight: 500;
+}
+
+.deleteList {
+    margin: 0 0 1.5rem 2.25rem;
+    padding: 0;
+}
+
+.deleteList li {
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.deleteNote {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.deleteActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Username Section Styles */
+.usernameSection {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid var(--color-border);
+    background-color: var(--color-bg-secondary);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.usernameInput {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.usernamePrefix {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    padding-left: 0.25rem;
+}
+
+.usernameInput input {
+    flex: 1;
+}
+
+.usernameChecking {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+}
+
+.usernameAvailable {
+    font-size: 0.8125rem;
+    color: var(--color-success);
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.usernameSaved {
+    font-size: 0.8125rem;
+    color: var(--color-success);
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.usernameError {
+    font-size: 0.8125rem;
+    color: var(--color-error);
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+}
+
+.usernameActions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.usernameHint {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-top: 0.75rem;
+}

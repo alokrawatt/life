@@ -1,0 +1,311 @@
+.loading {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.header {
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    margin-bottom: 0.25rem;
+}
+
+.header p {
+    color: var(--color-text-muted);
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .statsGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.statCard {
+    text-align: center;
+    padding: 1.25rem !important;
+}
+
+.statValue {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.statLabel {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+}
+
+.chartsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .chartsGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.chartCard {
+    padding: 1.5rem !important;
+}
+
+.chartCard h3 {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.barChart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 150px;
+    gap: 0.5rem;
+}
+
+.barWrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.bar {
+    flex: 1;
+    width: 100%;
+    background-color: var(--color-accent);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 4px;
+    position: relative;
+}
+
+.bar.barAlt {
+    background-color: var(--color-info);
+}
+
+.barValue {
+    position: absolute;
+    top: -1.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+.barLabel {
+    font-size: 0.6875rem;
+    color: var(--color-text-muted);
+    margin-top: 0.5rem;
+}
+
+.confidenceCard {
+    padding: 1.5rem !important;
+    margin-bottom: 1.5rem;
+}
+
+.confidenceCard h3 {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.avgConfidence {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.avgConfidence strong {
+    color: var(--color-text-primary);
+}
+
+.confidenceChart {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.confidenceBar {
+    display: grid;
+    grid-template-columns: 100px 1fr 40px;
+    align-items: center;
+    gap: 1rem;
+}
+
+.confidenceLevel {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+}
+
+.confidenceProgress {
+    height: 8px;
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.confidenceFill {
+    height: 100%;
+    background-color: var(--color-accent);
+    border-radius: var(--radius-full);
+    transition: width var(--transition-slow);
+}
+
+.confidenceCount {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    text-align: right;
+}
+
+.moodCard {
+    padding: 1.5rem !important;
+    margin-bottom: 1.5rem;
+}
+
+.moodCard h3 {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.moodGrid {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.moodItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 1rem;
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+    min-width: 80px;
+}
+
+.moodItem .moodEmoji {
+    font-size: 1.5rem;
+}
+
+.moodItem .moodName {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-transform: capitalize;
+}
+
+.moodItem .moodCount {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.recentCard {
+    padding: 1.5rem !important;
+    margin-bottom: 1.5rem;
+}
+
+.recentCard h3 {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.recentStats {
+    display: flex;
+    gap: 3rem;
+}
+
+.recentStat {
+    display: flex;
+    flex-direction: column;
+}
+
+.recentValue {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+.recentLabel {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+}
+
+.empty {
+    text-align: center;
+    padding: 3rem !important;
+}
+
+.empty h3 {
+    margin-bottom: 0.5rem;
+}
+
+.empty p {
+    color: var(--color-text-muted);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

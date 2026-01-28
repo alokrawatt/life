@@ -1,0 +1,146 @@
+.loading {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.container {
+    max-width: 700px;
+    margin: 0 auto;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.backBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.backBtn:hover {
+    color: var(--color-text-primary);
+}
+
+.backBtn svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+.headerActions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.notFound {
+    text-align: center;
+    padding: 3rem !important;
+}
+
+.notFound h2 {
+    margin-bottom: 0.5rem;
+}
+
+.notFound p {
+    color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.article {
+    margin-bottom: 2rem;
+}
+
+.meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.date {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+}
+
+.mood {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.625rem;
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-full);
+}
+
+.moodEmoji {
+    font-size: 1rem;
+}
+
+.moodLabel {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-transform: capitalize;
+}
+
+.article h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.content {
+    font-size: 1.0625rem;
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+}
+
+.content p {
+    margin-bottom: 1rem;
+}
+
+.deleteModal p {
+    margin-bottom: 1.5rem;
+}
+
+.deleteActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

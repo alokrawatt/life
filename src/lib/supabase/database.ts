@@ -9,35 +9,51 @@ const supabase = createClient();
 
 export const decisionService = {
     async getAll(): Promise<Decision[]> {
-        const { data, error } = await supabase
-            .from('decisions')
-            .select(`
-        *,
-        reflections (*)
-      `)
-            .order('created_at', { ascending: false });
+        try {
+            console.log('[DB] Fetching decisions...');
 
-        if (error) throw error;
+            // Debug: Check if we have an authenticated user
+            const { data: { user }, error: authError } = await supabase.auth.getUser();
+            if (authError) {
+                console.error('[DB] Auth error:', authError);
+            }
+            console.log('[DB] Current user:', user?.id || 'NO USER - RLS will block queries!');
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return (data || []).map((d: any) => ({
-            id: d.id,
-            userId: d.user_id,
-            title: d.title,
-            description: d.description || '',
-            confidenceLevel: d.confidence_level as 1 | 2 | 3 | 4 | 5,
-            category: d.category,
-            tags: d.tags || [],
-            lifePhaseId: d.life_phase_id,
-            createdAt: new Date(d.created_at),
-            updatedAt: new Date(d.updated_at),
-            reflections: (d.reflections || []).map((r: { id: string; content: string; created_at: string }) => ({
-                id: r.id,
-                content: r.content,
-                createdAt: new Date(r.created_at),
-            })),
-            linkedJournalIds: [],
-        }));
+            const { data, error } = await supabase
+                .from('decisions')
+                .select('*, reflections(*)')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('[DB] Decisions fetch error:', error);
+                throw error;
+            }
+
+            console.log('[DB] Decisions fetched:', data?.length || 0);
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            return (data || []).map((d: any) => ({
+                id: d.id,
+                userId: d.user_id,
+                title: d.title,
+                description: d.description || '',
+                confidenceLevel: d.confidence_level as 1 | 2 | 3 | 4 | 5,
+                category: d.category,
+                tags: d.tags || [],
+                lifePhaseId: d.life_phase_id,
+                createdAt: new Date(d.created_at),
+                updatedAt: new Date(d.updated_at),
+                reflections: (d.reflections || []).map((r: { id: string; content: string; created_at: string }) => ({
+                    id: r.id,
+                    content: r.content,
+                    createdAt: new Date(r.created_at),
+                })),
+                linkedJournalIds: [],
+            }));
+        } catch (err) {
+            console.error('[DB] Unexpected error in getAll:', err);
+            throw err;
+        }
     },
 
     async get(id: string): Promise<Decision | null> {

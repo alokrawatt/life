@@ -17,6 +17,7 @@ export default function DashboardPage() {
     const [journals, setJournals] = useState<JournalEntry[]>([]);
     const [activePhase, setActivePhase] = useState<LifePhase | null>(null);
     const [dataLoading, setDataLoading] = useState(true);
+    const [loadError, setLoadError] = useState<string | null>(null);
 
     useEffect(() => {
         if (!isLoading && !user) {
@@ -25,8 +26,15 @@ export default function DashboardPage() {
     }, [user, isLoading, router]);
 
     useEffect(() => {
+        let isMounted = true;
+
         const loadData = async () => {
-            if (!user) return;
+            if (!user) {
+                console.log('[Dashboard] No user, skipping data load');
+                return;
+            }
+
+            console.log('[Dashboard] Starting data load for user:', user.id);
 
             try {
                 const [decisionsData, journalsData, activePhaseData] = await Promise.all([
@@ -35,27 +43,72 @@ export default function DashboardPage() {
                     phaseService.getActive(),
                 ]);
 
-                setDecisions(decisionsData);
-                setJournals(journalsData);
-                setActivePhase(activePhaseData);
+                console.log('[Dashboard] Data loaded successfully:', {
+                    decisions: decisionsData.length,
+                    journals: journalsData.length,
+                    phase: activePhaseData?.name || 'none'
+                });
+
+                if (isMounted) {
+                    setDecisions(decisionsData);
+                    setJournals(journalsData);
+                    setActivePhase(activePhaseData);
+                    setLoadError(null);
+                    setDataLoading(false);
+                }
             } catch (error) {
-                console.error('Error loading data:', error);
-            } finally {
-                setDataLoading(false);
+                console.error('[Dashboard] Error loading data:', error);
+                if (isMounted) {
+                    setLoadError(`Failed to load data: ${error instanceof Error ? error.message : 'Unknown error'}`);
+                    setDataLoading(false);
+                }
             }
         };
 
         if (user) {
             loadData();
+        } else if (!isLoading) {
+            console.log('[Dashboard] Auth done, no user - stopping data load');
+            setDataLoading(false);
         }
-    }, [user]);
 
-    if (isLoading || !user || dataLoading) {
+        return () => {
+            isMounted = false;
+        };
+    }, [user, isLoading]);
+
+    if (isLoading || (!user && dataLoading)) {
         return (
             <div className={styles.loading}>
                 <div className={styles.spinner} />
             </div>
         );
+    }
+
+    if (loadError) {
+        return (
+            <AppLayout>
+                <div className={styles.container}>
+                    <Card className={styles.empty}>
+                        <div className={styles.emptyIcon}>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 8v4M12 16h.01" strokeLinecap="round" />
+                            </svg>
+                        </div>
+                        <h3>Connection Issue</h3>
+                        <p>{loadError}</p>
+                        <Button onClick={() => window.location.reload()}>
+                            Try Again
+                        </Button>
+                    </Card>
+                </div>
+            </AppLayout>
+        );
+    }
+
+    if (!user) {
+        return null;
     }
 
     const recentDecisions = decisions.slice(0, 3);

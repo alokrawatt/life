@@ -19,7 +19,8 @@ export const decisionService = {
 
         if (error) throw error;
 
-        return (data || []).map(d => ({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return (data || []).map((d: any) => ({
             id: d.id,
             userId: d.user_id,
             title: d.title,
@@ -174,7 +175,8 @@ export const journalService = {
 
         if (error) throw error;
 
-        return (data || []).map(e => ({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return (data || []).map((e: any) => ({
             id: e.id,
             userId: e.user_id,
             title: e.title,
@@ -287,7 +289,8 @@ export const phaseService = {
 
         if (error) throw error;
 
-        return (data || []).map(p => ({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return (data || []).map((p: any) => ({
             id: p.id,
             userId: p.user_id,
             name: p.name,

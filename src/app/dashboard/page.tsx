@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
@@ -18,6 +18,9 @@ export default function DashboardPage() {
     const [activePhase, setActivePhase] = useState<LifePhase | null>(null);
     const [dataLoading, setDataLoading] = useState(true);
     const [loadError, setLoadError] = useState<string | null>(null);
+    const [slowLoad, setSlowLoad] = useState(false);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const loadedRef = useRef(false);
 
     useEffect(() => {
         if (!isLoading && !user) {
@@ -27,6 +30,12 @@ export default function DashboardPage() {
 
     useEffect(() => {
         let isMounted = true;
+        loadedRef.current = false;
+
+        // Clear any existing timeout
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
 
         const loadData = async () => {
             if (!user) {
@@ -36,12 +45,23 @@ export default function DashboardPage() {
 
             console.log('[Dashboard] Starting data load for user:', user.id);
 
+            // Set a timeout to show "taking longer" message
+            timeoutRef.current = setTimeout(() => {
+                if (isMounted && !loadedRef.current) {
+                    console.log('[Dashboard] Load taking longer than expected...');
+                    setSlowLoad(true);
+                }
+            }, 8000);
+
             try {
                 const [decisionsData, journalsData, activePhaseData] = await Promise.all([
                     decisionService.getAll(),
                     journalService.getAll(),
                     phaseService.getActive(),
                 ]);
+
+                loadedRef.current = true;
+                if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
                 console.log('[Dashboard] Data loaded successfully:', {
                     decisions: decisionsData.length,
@@ -55,9 +75,11 @@ export default function DashboardPage() {
                     setActivePhase(activePhaseData);
                     setLoadError(null);
                     setDataLoading(false);
+                    setSlowLoad(false);
                 }
             } catch (error) {
                 console.error('[Dashboard] Error loading data:', error);
+                if (timeoutRef.current) clearTimeout(timeoutRef.current);
                 if (isMounted) {
                     setLoadError(`Failed to load data: ${error instanceof Error ? error.message : 'Unknown error'}`);
                     setDataLoading(false);
@@ -74,6 +96,9 @@ export default function DashboardPage() {
 
         return () => {
             isMounted = false;
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
         };
     }, [user, isLoading]);
 
@@ -81,6 +106,20 @@ export default function DashboardPage() {
         return (
             <div className={styles.loading}>
                 <div className={styles.spinner} />
+            </div>
+        );
+    }
+
+    if (dataLoading) {
+        return (
+            <div className={styles.loading}>
+                <div className={styles.spinner} />
+                {slowLoad && (
+                    <p style={{ marginTop: '1rem', color: 'var(--color-text-muted)', textAlign: 'center' }}>
+                        Taking longer than expected...<br />
+                        Please wait or refresh the page.
+                    </p>
+                )}
             </div>
         );
     }

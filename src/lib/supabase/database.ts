@@ -3,13 +3,39 @@ import { Decision, JournalEntry, LifePhase, Goal, PrivateProfile } from '@/types
 
 const supabase = createClient();
 
+// Helper function to retry operations with exponential backoff
+async function withRetry<T>(
+    operation: () => Promise<T>,
+    operationName: string,
+    maxRetries: number = 2,
+    baseDelay: number = 1000
+): Promise<T> {
+    let lastError: Error | null = null;
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+            if (attempt > 0) {
+                const delay = baseDelay * Math.pow(2, attempt - 1);
+                console.log(`[DB] Retrying ${operationName} (attempt ${attempt + 1}/${maxRetries + 1}) after ${delay}ms...`);
+                await new Promise(resolve => setTimeout(resolve, delay));
+            }
+            return await operation();
+        } catch (error) {
+            lastError = error as Error;
+            console.error(`[DB] ${operationName} failed (attempt ${attempt + 1}):`, error);
+        }
+    }
+
+    throw lastError;
+}
+
 // ============================================
 // DECISIONS
 // ============================================
 
 export const decisionService = {
     async getAll(): Promise<Decision[]> {
-        try {
+        return withRetry(async () => {
             console.log('[DB] Fetching decisions...');
 
             const { data, error } = await supabase
@@ -43,10 +69,7 @@ export const decisionService = {
                 })),
                 linkedJournalIds: [],
             }));
-        } catch (err) {
-            console.error('[DB] Unexpected error in getAll:', err);
-            throw err;
-        }
+        }, 'decisions.getAll');
     },
 
     async get(id: string): Promise<Decision | null> {

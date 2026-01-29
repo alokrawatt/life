@@ -12,13 +12,6 @@ export const decisionService = {
         try {
             console.log('[DB] Fetching decisions...');
 
-            // Debug: Check if we have an authenticated user
-            const { data: { user }, error: authError } = await supabase.auth.getUser();
-            if (authError) {
-                console.error('[DB] Auth error:', authError);
-            }
-            console.log('[DB] Current user:', user?.id || 'NO USER - RLS will block queries!');
-
             const { data, error } = await supabase
                 .from('decisions')
                 .select('*, reflections(*)')
